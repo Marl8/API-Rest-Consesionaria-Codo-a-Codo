@@ -1,15 +1,14 @@
 package com.example.concesionaria.service;
 
-import com.example.concesionaria.dto.VehiculoDto;
-import com.example.concesionaria.dto.VehiculoGetDto;
-import com.example.concesionaria.dto.VehiculoResponseDto;
+import com.example.concesionaria.dto.*;
 import com.example.concesionaria.entity.Vehiculo;
 import com.example.concesionaria.repository.IvehiculoRepository;
 import com.example.concesionaria.repository.VehiculoRepositoryImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -47,17 +46,21 @@ public class VehiculoServiceImpl implements IvehiculoService{
     }
 
     @Override
-    public List<VehiculoGetDto> findVehiculosByDate(String date) {
-        List<Vehiculo> result = repository.findVehiculosByDate(date);
-        List<VehiculoGetDto> listaResponse = new ArrayList<>();
+    public List<VehiculoGetDto> findVehiculosByDate(String date1, String date2) {
+        Date fecha1 = this.convertirFecha(date1);
+        Date fecha2 = this.convertirFecha(date2);
+        List<Vehiculo> result = repository.findVehiculosByDate(fecha1, fecha2);
         return convertirDto(result);
     }
 
     @Override
-    public List<VehiculoGetDto> findVehiculosByPrice(int price) {
-        List<Vehiculo> result = repository.findVehiculosByPrice(price);
+    public List<VehiculoGetDto> findVehiculosByPrice(int price1, int price2) {
+        List<Vehiculo> result = repository.findVehiculosByPrice(price1, price2);
         return convertirDto(result);
     }
+
+    /*
+    // Método lambda con Foreach()
 
     private List<VehiculoGetDto> convertirDto(List<Vehiculo> lista){
         List<VehiculoGetDto> listaResponse = new ArrayList<>();
@@ -67,5 +70,26 @@ public class VehiculoServiceImpl implements IvehiculoService{
                     v.getCountOfOwners()));
         });
         return listaResponse;
+    }*/
+
+    // Método lambda con Map()
+    private List<VehiculoGetDto> convertirDto(List<Vehiculo> lista){
+        List<VehiculoGetDto> listaResponse = lista.stream().map(v -> new VehiculoGetDto(v.getId(), v.getBrand(),
+                v.getModel(), v.getManufacturingDate(), v.getNumberOfKilometers(), v.getDoors(), v.getPrice(),
+                v.getCurrency(), v.getCountOfOwners())).toList();
+        return listaResponse;
+    }
+
+    private Date convertirFecha(String date) {
+        // Se da formato a la fecha
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha = null;
+        try {
+            // Se parsea los parámetros de tipo String a tipo Date
+            fecha = formato.parse(date);
+        } catch (ParseException e) {
+            System.out.println("Error parsing date" + e.getMessage());
+        }
+        return fecha;
     }
 }

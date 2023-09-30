@@ -33,12 +33,12 @@ public class controller {
     }
 
     @GetMapping("/dates")
-    public ResponseEntity<?> findVehiculoByDate(@RequestParam String since){
-        return new ResponseEntity<>(service.findVehiculosByDate(since), HttpStatus.OK);
+    public ResponseEntity<?> findVehiculoByDate(@RequestParam String since, @RequestParam String to){
+        return new ResponseEntity<>(service.findVehiculosByDate(since, to), HttpStatus.OK);
     }
 
     @GetMapping("/prices")
-    public ResponseEntity<?> findVehiculoByPrices(@RequestParam int since){
-        return new ResponseEntity<>(service.findVehiculosByPrice(since), HttpStatus.OK);
+    public ResponseEntity<?> findVehiculoByPrices(@RequestParam int since, @RequestParam int to){
+        return new ResponseEntity<>(service.findVehiculosByPrice(since, to), HttpStatus.OK);
     }
 }
