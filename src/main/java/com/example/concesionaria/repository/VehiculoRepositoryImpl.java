@@ -42,10 +42,12 @@ public class VehiculoRepositoryImpl implements IvehiculoRepository{
                 .toList();
     }
 
-    /*@Override
+    /*
+    @Override
     public List<Vehiculo> findVehiculosByDate(String date) {
         return this.lista.stream().filter(vehiculo -> vehiculo.getManufacturingDate().equals(date)).toList();
-    }*/
+    }
+    */
 
     @Override
     public List<Vehiculo> findVehiculosByPrice(int price1, int price2) {

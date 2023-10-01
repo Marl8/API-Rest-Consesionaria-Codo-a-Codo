@@ -60,7 +60,7 @@ public class VehiculoServiceImpl implements IvehiculoService{
     }
 
     /*
-    // Método lambda con Foreach()
+    // Método lambda para convertir a dto usando Foreach()
 
     private List<VehiculoGetDto> convertirDto(List<Vehiculo> lista){
         List<VehiculoGetDto> listaResponse = new ArrayList<>();
@@ -72,7 +72,7 @@ public class VehiculoServiceImpl implements IvehiculoService{
         return listaResponse;
     }*/
 
-    // Método lambda con Map()
+    // Método lambda para convertir a dto usando Map()
     private List<VehiculoGetDto> convertirDto(List<Vehiculo> lista){
         List<VehiculoGetDto> listaResponse = lista.stream().map(v -> new VehiculoGetDto(v.getId(), v.getBrand(),
                 v.getModel(), v.getManufacturingDate(), v.getNumberOfKilometers(), v.getDoors(), v.getPrice(),
@@ -85,7 +85,7 @@ public class VehiculoServiceImpl implements IvehiculoService{
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha = null;
         try {
-            // Se parsea los parámetros de tipo String a tipo Date
+            // Se parsea el parámetro de tipo String a tipo Date
             fecha = formato.parse(date);
         } catch (ParseException e) {
             System.out.println("Error parsing date" + e.getMessage());
