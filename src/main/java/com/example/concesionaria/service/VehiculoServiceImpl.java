@@ -106,16 +106,19 @@ public class VehiculoServiceImpl implements IvehiculoService{
         return listaResponse;
     }
 
+    // Método para convertir String en LocalDate
     private LocalDate convertirFecha(String date) {
         // Se da formato a la fecha
         DateTimeFormatter formato =  DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fecha = null;
-        // Se parsea el parámetro de tipo String a tipo Date
+        // Se parsea el parámetro de tipo String a tipo LocalDate
         fecha = LocalDate.parse(date, formato);
         return fecha;
     }
 
    /*
+   // Método para convertir String en Date
+
    private Date convertirFecha(String date) {
         // Se da formato a la fecha
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");

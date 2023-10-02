@@ -56,6 +56,7 @@ public class VehiculoRepositoryImpl implements IvehiculoRepository{
                 .toList();
     }
 
+    // Método comparando Strings con equals()
     @Override
     public List<Vehiculo> findVehiculosByDate(String date) {
         return this.lista.stream().filter(vehiculo -> vehiculo.getManufacturingDate().equals(date)).toList();
