@@ -45,6 +45,11 @@ public class VehiculoServiceImpl implements IvehiculoService{
     /*
     * SOLUCIÓN ERROR => "Java 8 date/time type not supported by default"
     *
+    * (El error se produce al querer serializar un LocalDate con la librería
+    * default de ObjectMapper, dado que esta no reconoce las clases tipo TIME que
+    * fueron incluidas en Java 8 por lo cual se hace necesario trabajar con una
+    * versión actualizada de esta librería).
+    *
     * Paso 1:
     *       Agregar la siguiente dependencia:
         *   <dependency>
@@ -53,7 +58,8 @@ public class VehiculoServiceImpl implements IvehiculoService{
                   <version>2.13.4</version>
              </dependency>
     * Paso 2:
-    *       Registrar el módulo JavaTimeModule() una vez inicializado el mapper:
+    *       Registrar el módulo JavaTimeModule() una vez inicializado el mapper, para
+    *       indicar que vamos a trabajar con la versión actualizada y no con el default:
     *
     *       ObjectMapper mapper = new ObjectMapper();
     *       mapper.registerModule(new JavaTimeModule());
