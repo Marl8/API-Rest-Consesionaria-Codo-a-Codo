@@ -31,7 +31,7 @@ public class VehiculoServiceImpl implements IvehiculoService{
         Vehiculo respuestaRepo = repository.guardarVehiculo(vehiculo);
 
         if(respuestaRepo == null){
-            return new VehiculoResponseDto("No se logró guardar.");
+            return new VehiculoResponseDto("Error!!! No se logró guardar el vehiculo.");
         }
         return new VehiculoResponseDto("El vehiculo modelo "+ respuestaRepo.getModel() + " se guardó correctamente.");
     }
@@ -110,9 +110,9 @@ public class VehiculoServiceImpl implements IvehiculoService{
     private LocalDate convertirFecha(String date) {
         // Se da formato a la fecha
         DateTimeFormatter formato =  DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate fecha = null;
+
         // Se parsea el parámetro de tipo String a tipo LocalDate
-        fecha = LocalDate.parse(date, formato);
+        LocalDate fecha = LocalDate.parse(date, formato);
         return fecha;
     }
 
