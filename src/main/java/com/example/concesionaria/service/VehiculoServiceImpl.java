@@ -5,9 +5,12 @@ import com.example.concesionaria.entity.Vehiculo;
 import com.example.concesionaria.repository.IvehiculoRepository;
 import com.example.concesionaria.repository.VehiculoRepositoryImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class VehiculoServiceImpl implements IvehiculoService{
     @Override
     public VehiculoResponseDto guardarVehiculo(VehiculoDto auto) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
         Vehiculo vehiculo = mapper.convertValue(auto,Vehiculo.class);
         Vehiculo respuestaRepo = repository.guardarVehiculo(vehiculo);
 
@@ -38,17 +42,39 @@ public class VehiculoServiceImpl implements IvehiculoService{
         return convertirDto(result);
     }
 
+    /*
+    * SOLUCIÓN ERROR => "Java 8 date/time type not supported by default"
+    *
+    * Paso 1:
+    *       Agregar la siguiente dependencia:
+        *   <dependency>
+                  <groupId>com.fasterxml.jackson.datatype</groupId>
+                  <artifactId>jackson-datatype-jsr310</artifactId>
+                  <version>2.13.4</version>
+             </dependency>
+    * Paso 2:
+    *       Registrar el módulo JavaTimeModule() una vez inicializado el mapper:
+    *
+    *       ObjectMapper mapper = new ObjectMapper();
+    *       mapper.registerModule(new JavaTimeModule());
+    *
+    * Fuente:
+    *
+    * https://howtodoinjava.com/jackson/java-8-date-time-type-not-supported-by-default/
+    * */
+
     @Override
     public VehiculoDto findVehiculoById(int id) {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
         Vehiculo auto = repository.findVehiculoById(id);
         return mapper.convertValue(auto,VehiculoDto.class);
     }
 
     @Override
     public List<VehiculoGetDto> findVehiculosByDate(String date1, String date2) {
-        Date fecha1 = this.convertirFecha(date1);
-        Date fecha2 = this.convertirFecha(date2);
+        LocalDate fecha1 = this.convertirFecha(date1);
+        LocalDate fecha2 = this.convertirFecha(date2);
         List<Vehiculo> result = repository.findVehiculosByDate(fecha1, fecha2);
         return convertirDto(result);
     }
@@ -80,7 +106,17 @@ public class VehiculoServiceImpl implements IvehiculoService{
         return listaResponse;
     }
 
-    private Date convertirFecha(String date) {
+    private LocalDate convertirFecha(String date) {
+        // Se da formato a la fecha
+        DateTimeFormatter formato =  DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate fecha = null;
+        // Se parsea el parámetro de tipo String a tipo Date
+        fecha = LocalDate.parse(date, formato);
+        return fecha;
+    }
+
+   /*
+   private Date convertirFecha(String date) {
         // Se da formato a la fecha
         SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha = null;
@@ -92,4 +128,5 @@ public class VehiculoServiceImpl implements IvehiculoService{
         }
         return fecha;
     }
+    */
 }

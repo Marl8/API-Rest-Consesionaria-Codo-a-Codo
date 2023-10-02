@@ -2,6 +2,8 @@ package com.example.concesionaria.repository;
 
 import com.example.concesionaria.entity.Vehiculo;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -34,6 +36,18 @@ public class VehiculoRepositoryImpl implements IvehiculoRepository{
         return encontrado;
     }
 
+    // Método con LocalDate
+    @Override
+    public List<Vehiculo> findVehiculosByDate(LocalDate date1, LocalDate date2) {
+        return this.lista.stream()
+                .filter(vehiculo -> vehiculo.getManufacturingDate()
+                        .isAfter(date1) && vehiculo.getManufacturingDate().isBefore(date2))
+                .toList();
+    }
+
+    /*
+    // Método con Date
+
     @Override
     public List<Vehiculo> findVehiculosByDate(Date date1, Date date2) {
         return this.lista.stream()
@@ -42,7 +56,6 @@ public class VehiculoRepositoryImpl implements IvehiculoRepository{
                 .toList();
     }
 
-    /*
     @Override
     public List<Vehiculo> findVehiculosByDate(String date) {
         return this.lista.stream().filter(vehiculo -> vehiculo.getManufacturingDate().equals(date)).toList();
