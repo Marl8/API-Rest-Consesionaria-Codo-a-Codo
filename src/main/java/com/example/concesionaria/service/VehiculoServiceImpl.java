@@ -67,6 +67,7 @@ public class VehiculoServiceImpl implements IvehiculoService{
     * Fuente:
     *
     * https://howtodoinjava.com/jackson/java-8-date-time-type-not-supported-by-default/
+    * https://stackoverflow.com/questions/74188846/how-to-fix-jackson-java-8-data-time-error
     * */
 
     @Override
@@ -85,10 +86,23 @@ public class VehiculoServiceImpl implements IvehiculoService{
         return convertirDto(result);
     }
 
+    /*
+    // Usando un Dto sin Services
+
     @Override
     public List<VehiculoGetDto> findVehiculosByPrice(int price1, int price2) {
         List<Vehiculo> result = repository.findVehiculosByPrice(price1, price2);
         return convertirDto(result);
+    }
+    */
+
+    // Usando un dto con todos los atributos
+    @Override
+    public List<VehiculoDto> findVehiculosByPrice(int price1, int price2) {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        List<Vehiculo> result = repository.findVehiculosByPrice(price1, price2);
+        return result.stream().map(v -> mapper.convertValue(v, VehiculoDto.class)).toList();
     }
 
     /*
