@@ -96,7 +96,7 @@ public class VehiculoServiceImpl implements IvehiculoService{
     }
     */
 
-    // Usando un dto con todos los atributos
+    // Usando un dto con todos los atributos (Incluyendo Services)
     @Override
     public List<VehiculoDto> findVehiculosByPrice(int price1, int price2) {
         ObjectMapper mapper = new ObjectMapper();
